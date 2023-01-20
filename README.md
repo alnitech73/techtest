@@ -19,6 +19,7 @@ Prerequisite:
 Steps:
 
 * Go to project folder: `cd aws-cli`
+* Build test image and runs coverage report: `make test`
 * Build docker image: `make build`
 * Run docker image: `make run region=<REGION_NAME>`. Default region is **us-east-2**
 * Help: `make help`
