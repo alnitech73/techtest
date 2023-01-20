@@ -3,6 +3,8 @@
 # Created by https://www.gitignore.io/api/windows,visualstudiocode,terraform
 # Edit at https://www.gitignore.io/?templates=windows,visualstudiocode,terraform
 
+.coverage
+**/__pycache__/*
 ### Terraform ###
 # Local .terraform directories
 **/.terraform/*

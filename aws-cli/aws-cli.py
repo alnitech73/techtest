@@ -4,6 +4,17 @@ import logging
 import boto3
 from botocore.exceptions import ClientError
 
+def validate_region(region, region_list):
+    if not type(region_list) is list:
+        return False
+    try: 
+        if not region in region_list:
+            return False
+    except TypeError as e:
+        logging.error(e)
+        return False
+    return True
+
 # Function that returns the list of valid AWS regions. Used to validate region specified by the user.
 # In case there is no default region set in credentials file will use "us-east-1" so the boto3.client doesn't error out.
 def list_regions():
@@ -17,6 +28,8 @@ def list_regions():
     except ClientError as e:
         logging.error(e)
         return "error listing regions"
+    finally:
+        ec2.close()
     return region_list
 
 # Function that returns the list of all instances within the specied region.
@@ -38,6 +51,11 @@ def list_instances(region):
     except ClientError as e:
         logging.error(e)
         return "error listing instances"
+    except TypeError as e:
+        logging.error(e)
+        return "missing region"
+    finally:
+        ec2.close()
     return instance_list
 
 # Main function - parsing and validating arguments
@@ -47,7 +65,7 @@ def main():
     parser.add_argument("-r","--region", help="valid AWS region name", required=True)
     args = parser.parse_args()
 
-    if not args.region in list_regions():
+    if not validate_region(args.region, list_regions()):
         print("ERR: Region provided is not a valid AWS region!")
         sys.exit(2)
 
